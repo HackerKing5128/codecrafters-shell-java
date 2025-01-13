@@ -33,7 +33,7 @@ public class Main {
                 if(Arrays.asList(commands).contains(cmd)) {
                     System.out.println(cmd + " is a shell builtin");
                 } else {
-                System.out.println(input + ": not found");
+                System.out.println(cmd + ": not found");
                 }
 
             } else {
