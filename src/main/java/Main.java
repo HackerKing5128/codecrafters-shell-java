@@ -17,9 +17,9 @@ public class Main {
             Path cmdPath = Paths.get(dir, cmd);
             if (Files.exists(cmdPath) && Files.isExecutable(cmdPath)) {
                 return cmd + " is " + cmdPath.toString(); // Return the full path as a string
-            } /* else if (Arrays.asList(commands).contains(cmd)) {
+            } else if (Arrays.asList(commands).contains(cmd)) {
                 return cmd + " is a shell builtin";   // functionality from type builtin v1.0
-            } */
+            }
         }
 
         return cmd + ": not found";
