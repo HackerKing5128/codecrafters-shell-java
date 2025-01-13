@@ -14,6 +14,10 @@ public class Main {
 
                 System.exit(exitCode);
 
+            } else if(input.startsWith("echo")) {
+                String text = input.substring(5);
+                System.out.println(text);
+
             } else {
                 System.out.println(input + ": command not found");
             }
