@@ -87,14 +87,21 @@ public class Main {
             newDir = new File(currDir, newDirectory);
         }
 
-        // Check if the resolved directory exists & is valid
-        if (newDir.exists() && newDir.isDirectory()) {
-            // Update "user.dir" System property
-            System.setProperty("user.dir", newDir.getAbsolutePath());
+        try {
+            // Normalize the path to resolve relative segments like "./" and "../"
+            String canonicalPath = newDir.getCanonicalPath();
 
-        } else {
-            // if directory doesn't exist or invalid
-            System.out.println("cd: " + newDirectory + ": No such file or directory");
+            // Check if the resolved directory exists and is valid
+            File canonicalDir = new File(canonicalPath);
+            if (canonicalDir.exists() && canonicalDir.isDirectory()) {
+                // Update the "user.dir" system property
+                System.setProperty("user.dir", canonicalPath);
+                System.out.println("Changed directory to: " + canonicalPath);
+            } else {
+                System.out.println("cd: " + newDirectory + ": No such file or directory");
+            }
+        } catch (IOException e) {
+            System.out.println("cd: Error resolving path: " + e.getMessage());
         }
 
     }
