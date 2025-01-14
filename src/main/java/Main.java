@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.*;
@@ -72,10 +73,30 @@ public class Main {
 
     }
 
+    public static String pwd() {
+        return System.getProperty("user.dir"); // return present working directory
+    }
+
+    public static void changeDirectory(String newDirectory) {
+        // Specify the new working directory
+        File newDir = new File(newDirectory);
+
+        // Check if the directory exists & is valid
+        if (newDir.exists() && newDir.isDirectory()) {
+            // Update "user.dir" System property
+            System.setProperty("user.dir", newDir.getAbsolutePath());
+
+        } else {
+            // if directory doesn't exist or invalid
+            System.out.println("cd: " + newDirectory + ": No such file or directory");
+        }
+
+    }
+
     public static void main(String[] args) throws Exception {
 
         while (true) {
-            String[] commands = { "echo", "exit", "type", "pwd" };
+            String[] commands = { "echo", "exit", "type", "pwd", "cd" };
 
             System.out.print("$ ");
 
@@ -85,7 +106,8 @@ public class Main {
             if (input.startsWith("exit")) {
                 // exit builtin
 
-                int exitCode = Integer.parseInt(input.substring(5).trim()); // Extract from index 5, trim spaces, and parse
+                int exitCode = Integer.parseInt(input.substring(5).trim()); // Extract from index 5, trim spaces, and
+                                                                            // parse
                 System.exit(exitCode);
 
             } else if (input.startsWith("echo")) {
@@ -96,12 +118,19 @@ public class Main {
 
             } else if (input.startsWith("type")) {
                 // type builtin
+
                 System.out.println(type_path(input, commands));
 
             } else if (input.equals("pwd")) {
                 // pwd command implementation
-                String pwd = System.getProperty("user.dir");
-                System.out.println(pwd);
+
+                System.out.println(pwd());
+
+            } else if (input.startsWith("cd")) {
+                // cd builtin
+
+                String newDir = input.substring(3); // extract the path of new directory
+                changeDirectory(newDir);
 
             } else {
                 // check for external programs
