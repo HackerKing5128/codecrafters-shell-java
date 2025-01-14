@@ -75,7 +75,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         while (true) {
-            String[] commands = { "echo", "exit", "type" };
+            String[] commands = { "echo", "exit", "type", "pwd" };
 
             System.out.print("$ ");
 
