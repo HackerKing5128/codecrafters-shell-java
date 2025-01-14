@@ -77,7 +77,7 @@ public class Main {
         return System.getProperty("user.dir"); // return present working directory
     }
 
-    public static void changeDirectory(String newDirectory) {
+    public static void changeDirectoryByPath(String newDirectory) {
         // Get the current working directory (pwd)
         String currDir = pwd();
 
@@ -142,7 +142,16 @@ public class Main {
                 // cd builtin
 
                 String newDir = input.substring(3); // extract the path of new directory
-                changeDirectory(newDir);
+
+                if (newDir.equals("~")) {
+                    // if "~" is provided for HOME directory
+                    String path = System.getenv("HOME");    // get environment variable HOME -> home directory path
+                    changeDirectoryByPath(path);
+
+                } else {
+                    // if path is provided
+                    changeDirectoryByPath(newDir);
+                }
 
             } else {
                 // check for external programs
