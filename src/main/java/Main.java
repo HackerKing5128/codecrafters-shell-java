@@ -78,10 +78,16 @@ public class Main {
     }
 
     public static void changeDirectory(String newDirectory) {
-        // Specify the new working directory
-        File newDir = new File(newDirectory);
+        // Get the current working directory (pwd)
+        String currDir = pwd();
 
-        // Check if the directory exists & is valid
+        // Resolve the path (relative to the current directory if not absolute)
+        File newDir = new File(newDirectory);
+        if (!newDir.isAbsolute()) {
+            newDir = new File(currDir, newDirectory);
+        }
+
+        // Check if the resolved directory exists & is valid
         if (newDir.exists() && newDir.isDirectory()) {
             // Update "user.dir" System property
             System.setProperty("user.dir", newDir.getAbsolutePath());
