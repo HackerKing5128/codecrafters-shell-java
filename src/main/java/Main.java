@@ -96,7 +96,6 @@ public class Main {
             if (canonicalDir.exists() && canonicalDir.isDirectory()) {
                 // Update the "user.dir" system property
                 System.setProperty("user.dir", canonicalPath);
-                System.out.println("Changed directory to: " + canonicalPath);
             } else {
                 System.out.println("cd: " + newDirectory + ": No such file or directory");
             }
