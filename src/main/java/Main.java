@@ -98,6 +98,11 @@ public class Main {
                 // type builtin
                 System.out.println(type_path(input, commands));
 
+            } else if (input.equals("pwd")) {
+                // pwd command implementation
+                String pwd = System.getProperty("user.dir");
+                System.out.println(pwd);
+
             } else {
                 // check for external programs
 
