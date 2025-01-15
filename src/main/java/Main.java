@@ -12,6 +12,8 @@ public class Main {
     public static String parseText(String quotedString) {
         // parse argument for ECHO builtin 
 
+        quotedString = quotedString.replaceAll("\\s+", " ");
+
         // Regex for finding text within single quotes
         Pattern pattern = Pattern.compile("'(.*?)'");
         Matcher matcher = pattern.matcher(quotedString);
