@@ -4,9 +4,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Arrays;
+import java.util.regex.*;
 import java.util.Scanner;
 
 public class Main {
+    
+    public static String parseText(String quotedString) {
+        // parse argument for ECHO builtin 
+
+        // Regex for finding text within single quotes
+        Pattern pattern = Pattern.compile("'(.*?)'");
+        Matcher matcher = pattern.matcher(quotedString);
+
+        if (matcher.find()) {
+            // If Text in single quote
+            return matcher.group(1);  // Extract & returnb the quoted text
+
+        } else {
+            // if Text is not given in quotation, return original text
+            return quotedString;
+        }
+
+    }
 
     public static String type_path(String input, String[] commands) {
         // type builtin - executable files v2.0
@@ -114,6 +133,7 @@ public class Main {
 
             Scanner sc = new Scanner(System.in);
             String input = sc.nextLine();
+            
 
             if (input.startsWith("exit")) {
                 // exit builtin
@@ -125,7 +145,7 @@ public class Main {
             } else if (input.startsWith("echo")) {
                 // echo builtin
 
-                String text = input.substring(5);
+                String text = parseText(input.substring(5));
                 System.out.println(text);
 
             } else if (input.startsWith("type")) {
