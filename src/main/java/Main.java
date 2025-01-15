@@ -4,28 +4,37 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.*;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.regex.*;
 import java.util.Scanner;
 
 public class Main {
+
+    public static String[] parseText(String inputStrings) {
+        // parse argument for ECHO builtin
+
+        ArrayList<String> tokens = new ArrayList<>(); // to store argument strings
+
+        /*
+         * Regex for finding text within :-
+         * '([^']*)': Matches single-quoted strings.
+         * (\\S+): Matches unquoted words.
+         */
+        Pattern pattern = Pattern.compile("'(.*?)'|(\\S+)");
+        Matcher matcher = pattern.matcher(inputStrings);
+
+        while (matcher.find()) {
+
+            if (matcher.group(1) != null) {
+                // single-quoted text
+                tokens.add(matcher.group(1)); 
     
-    public static String parseText(String quotedString) {
-        // parse argument for ECHO builtin 
-
-        quotedString = quotedString.replaceAll("\\s+", " ");
-
-        // Regex for finding text within single quotes
-        Pattern pattern = Pattern.compile("'(.*?)'");
-        Matcher matcher = pattern.matcher(quotedString);
-
-        if (matcher.find()) {
-            // If Text in single quote
-            return matcher.group(1);  // Extract & returnb the quoted text
-
-        } else {
-            // if Text is not given in quotation, return original text
-            return quotedString;
+            } else if (matcher.group(2) != null) {
+                tokens.add(matcher.group(2));  // unquoted text
+            }
         }
+
+        return tokens.toArray(new String[0]);
 
     }
 
@@ -135,7 +144,6 @@ public class Main {
 
             Scanner sc = new Scanner(System.in);
             String input = sc.nextLine();
-            
 
             if (input.startsWith("exit")) {
                 // exit builtin
@@ -147,8 +155,12 @@ public class Main {
             } else if (input.startsWith("echo")) {
                 // echo builtin
 
-                String text = parseText(input.substring(5));
-                System.out.println(text);
+                // Parse arguments to handle quotes & concatenation
+                String[] text = parseText(input.substring(5).trim());
+
+                // Concatenate parsed arguments with single space
+                String result = String.join("", text);
+                System.out.println(result);
 
             } else if (input.startsWith("type")) {
                 // type builtin
@@ -167,7 +179,7 @@ public class Main {
 
                 if (newDir.equals("~")) {
                     // if "~" is provided for HOME directory
-                    String path = System.getenv("HOME");    // get environment variable HOME -> home directory path
+                    String path = System.getenv("HOME"); // get environment variable HOME -> home directory path
                     changeDirectoryByPath(path);
 
                 } else {
