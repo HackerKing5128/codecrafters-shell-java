@@ -13,7 +13,7 @@ public class Main {
     public static String[] parseText(String inputStrings) {
         // parse argument for ECHO builtin
 
-        ArrayList<String> tokens = new ArrayList<>(); // to store argument strings
+        StringBuilder parsedOutput = new StringBuilder(); // to store argument strings
 
         /*
          * Regex for finding text within :-
@@ -27,14 +27,19 @@ public class Main {
 
             if (matcher.group(1) != null) {
                 // single-quoted text
-                tokens.add(matcher.group(1)); 
+                parsedOutput.append(matcher.group(1)); 
     
             } else if (matcher.group(2) != null) {
-                tokens.add(matcher.group(2));  // unquoted text
+                // unquoted text
+                if (parsedOutput.length() > 0 && !parsedOutput.toString().endsWith(" ")) {
+                    parsedOutput.append(" ");  // Add a space only if necessary
+                }
+
+                parsedOutput.append(matcher.group(2));  
             }
         }
 
-        return tokens.toArray(new String[0]);
+        return parsedOutput.toString().split(" ");
 
     }
 
