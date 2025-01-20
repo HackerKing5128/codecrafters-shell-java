@@ -11,37 +11,54 @@ import java.util.Scanner;
 public class Main {
 
     public static String[] parseText(String inputStrings) {
-        // parse argument for ECHO builtin
-
-        StringBuilder parsedOutput = new StringBuilder(); // to store argument strings
-
+        // Parse arguments for ECHO builtin
+        ArrayList<String> tokens = new ArrayList<>();
+        
         /*
-         * Regex for finding text within :-
-         * '([^']*)': Matches single-quoted strings.
-         * (\\S+): Matches unquoted words.
-         */
+        * Regex for finding text within:
+        * '(.*?)': Matches single-quoted strings.
+        * (\S+): Matches unquoted words.
+        */
         Pattern pattern = Pattern.compile("'(.*?)'|(\\S+)");
         Matcher matcher = pattern.matcher(inputStrings);
-
-        while (matcher.find()) {
-
-            if (matcher.group(1) != null) {
-                // single-quoted text
-                parsedOutput.append(matcher.group(1)); 
     
+        StringBuilder currentToken = new StringBuilder();
+        boolean inProgress = false; // Track if we're building a token across matches
+    
+        while (matcher.find()) {
+            if (matcher.group(1) != null) {
+                // Single-quoted text
+                currentToken.append(matcher.group(1));
+                inProgress = true;
             } else if (matcher.group(2) != null) {
-                // unquoted text
-                if (parsedOutput.length() > 0 && !parsedOutput.toString().endsWith(" ")) {
-                    parsedOutput.append(" ");  // Add a space only if necessary
+                // Unquoted text
+                if (inProgress) {
+                    // Finalize previous token if present
+                    tokens.add(currentToken.toString());
+                    currentToken.setLength(0);
                 }
-
-                parsedOutput.append(matcher.group(2));  
+                tokens.add(matcher.group(2));
+                inProgress = false;
+            }
+    
+            // Check if the token is finalized
+            if (matcher.end() == inputStrings.length() || inputStrings.charAt(matcher.end()) == ' ') {
+                if (inProgress) {
+                    tokens.add(currentToken.toString());
+                    currentToken.setLength(0);
+                    inProgress = false;
+                }
             }
         }
-
-        return parsedOutput.toString().split(" ");
-
+    
+        // Add any remaining token
+        if (currentToken.length() > 0) {
+            tokens.add(currentToken.toString());
+        }
+    
+        return tokens.toArray(new String[0]);
     }
+    
 
     public static String type_path(String input, String[] commands) {
         // type builtin - executable files v2.0
