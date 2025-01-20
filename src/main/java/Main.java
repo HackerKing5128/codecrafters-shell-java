@@ -159,7 +159,7 @@ public class Main {
                 String[] text = parseText(input.substring(5).trim());
 
                 // Concatenate parsed arguments with single space
-                String result = String.join("", text);
+                String result = String.join(" ", text);
                 System.out.println(result);
 
             } else if (input.startsWith("type")) {
